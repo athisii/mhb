@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/home_hymn_fragment">
+    <fragment
+        android:id="@+id/home_hymn_fragment"
+        android:name="com.athisii.mhb.ui.hymn.HomeHymnFragment"
+        android:label="Hymn"
+        tools:layout="@layout/fragment_home_hymn" />
+    <fragment
+        android:id="@+id/favourite_hymn_fragment"
+        android:name="com.athisii.mhb.ui.hymn.FavouriteHymnFragment"
+        android:label="Favourite"
+        tools:layout="@layout/fragment_favourite_hymn" />
+    <fragment
+        android:id="@+id/compose_song_fragment"
+        android:name="com.athisii.mhb.ui.hymn.ComposeSongFragment"
+        android:label="Compose"
+        tools:layout="@layout/fragment_compose_song" />
+    <fragment
+        android:id="@+id/home_bible_fragment"
+        android:name="com.athisii.mhb.ui.bible.HomeBibleFragment"
+        android:label="Bible"
+        tools:layout="@layout/fragment_home_bible" />
+    <fragment
+        android:id="@+id/bookmark_bible_fragment"
+        android:name="com.athisii.mhb.ui.bible.BookmarkBibleFragment"
+        android:label="Bookmark"
+        tools:layout="@layout/fragment_bookmark_bible" />
+</navigation>
