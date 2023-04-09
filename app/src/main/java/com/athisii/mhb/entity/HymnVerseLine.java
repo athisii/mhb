@@ -14,25 +14,24 @@ import java.io.Serializable;
  * @version 1.0
  * @since 05/02/23
  */
-@Entity(tableName = "hymn_verse_line", foreignKeys = @ForeignKey(entity = HymnVerse.class, parentColumns = "id", childColumns = "hymn_verse_id", onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "hymn_verse_line", foreignKeys = @ForeignKey(entity = HymnVerse.class, parentColumns = "id", childColumns = "hymn_verse_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
 public class HymnVerseLine implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Integer id;
+    private long id;
     @ColumnInfo(name = "serial_number", defaultValue = "0")
     private byte serialNumber;
-    @ColumnInfo(name = "maola", defaultValue = "Not Available")
+    @ColumnInfo(name = "maola", defaultValue = "NA")
     private String maola;
-    @ColumnInfo(name = "english", defaultValue = "Not Available")
+    @ColumnInfo(name = "english", defaultValue = "NA")
     private String english;
     @ColumnInfo(name = "hymn_verse_id", index = true)
-    private int hymnVerseId;
+    private long hymnVerseId;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,12 +59,23 @@ public class HymnVerseLine implements Serializable {
         this.english = english;
     }
 
-    public int getHymnVerseId() {
+    public long getHymnVerseId() {
         return hymnVerseId;
     }
 
-    public void setHymnVerseId(int hymnVerseId) {
+    public void setHymnVerseId(long hymnVerseId) {
         this.hymnVerseId = hymnVerseId;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "HymnVerseLine{" +
+                "id=" + id +
+                ", serialNumber=" + serialNumber +
+                ", maola='" + maola + '\'' +
+                ", english='" + english + '\'' +
+                ", hymnVerseId=" + hymnVerseId +
+                '}';
+    }
 }

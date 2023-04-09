@@ -1,6 +1,5 @@
 package com.athisii.mhb.entity;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -10,26 +9,24 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(tableName = "bible_book_chapter", foreignKeys = @ForeignKey(entity = BibleBook.class, parentColumns = "id", childColumns = "bible_id", onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "bible_book_chapter", foreignKeys = @ForeignKey(entity = BibleBook.class, parentColumns = "id", childColumns = "bible_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
 public class BibleBookChapter implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Integer id;
+    private long id;
     @ColumnInfo(name = "chapter_number", defaultValue = "0")
     private short chapterNumber;
     @ColumnInfo(name = "bible_id", defaultValue = "0", index = true)
-    private int bibleId;
+    private long bibleId;
 
     // To be used only when data is fetched from the server.
     @Ignore
-    List<BibleBookChapterVerse> verses;
+    private List<BibleBookChapterVerse> verses;
 
-    @NonNull
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -41,11 +38,11 @@ public class BibleBookChapter implements Serializable {
         this.chapterNumber = chapterNumber;
     }
 
-    public int getBibleId() {
+    public long getBibleId() {
         return bibleId;
     }
 
-    public void setBibleId(int bibleId) {
+    public void setBibleId(long bibleId) {
         this.bibleId = bibleId;
     }
 

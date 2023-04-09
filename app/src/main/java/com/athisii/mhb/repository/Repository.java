@@ -55,7 +55,7 @@ public class Repository {
     }
 
     public void deleteAllHymnsInDb() {
-        ForkJoinPool.commonPool().execute(() -> database.hymnDao().deleteAllHymns());
+        ForkJoinPool.commonPool().execute(() -> database.hymnDao().deleteAll());
     }
 
     public List<Hymn> getAllHymns() {
@@ -88,9 +88,7 @@ public class Repository {
     }
 
     public void insertHymns(List<Hymn> hymns) {
-        if (!hymns.isEmpty()) {
-            database.hymnDao().insertHymns(hymns);
-        }
+        database.hymnDao().insertHymns(hymns);
     }
 
     public void insertBible(List<BibleBook> bibleBook) {

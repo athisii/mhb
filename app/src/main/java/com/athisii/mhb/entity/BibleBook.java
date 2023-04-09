@@ -1,6 +1,5 @@
 package com.athisii.mhb.entity;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -12,8 +11,7 @@ import java.util.List;
 @Entity(tableName = "bible_book")
 public class BibleBook implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Integer id;
+    private long id;
     @ColumnInfo(name = "maola_name", defaultValue = "NA", index = true)
     private String maolaName;
     @ColumnInfo(name = "english_name", defaultValue = "NA", index = true)
@@ -21,14 +19,13 @@ public class BibleBook implements Serializable {
 
     // To be used only when data is loaded from the file.
     @Ignore
-    List<BibleBookChapter> chapters;
+    private List<BibleBookChapter> chapters;
 
-    @NonNull
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

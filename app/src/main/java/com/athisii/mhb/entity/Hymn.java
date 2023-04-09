@@ -10,11 +10,10 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(indices = {@Index(name = "hymn_number", value = {"hymn_number"}, unique = true)})
+@Entity(tableName = "hymn", indices = {@Index(name = "hymn_number", value = {"hymn_number"}, unique = true)})
 public class Hymn implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Integer id;
+    private long id;
     @ColumnInfo(name = "hymn_number", defaultValue = "0")
     private short hymnNumber;
     @ColumnInfo(name = "is_favourite", index = true)
@@ -29,12 +28,12 @@ public class Hymn implements Serializable {
     @Ignore
     private List<HymnVerse> hymnVerses;
 
-    public void setId(@NonNull Integer id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
-    public Integer getId() {
-        return id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public short getHymnNumber() {
@@ -75,5 +74,18 @@ public class Hymn implements Serializable {
 
     public void setHymnVerses(List<HymnVerse> hymnVerses) {
         this.hymnVerses = hymnVerses;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Hymn{" +
+                "id=" + id +
+                ", hymnNumber=" + hymnNumber +
+                ", isFavorite=" + isFavorite +
+                ", maolaTitle='" + maolaTitle + '\'' +
+                ", englishTitle='" + englishTitle + '\'' +
+                ", hymnVerses=" + hymnVerses +
+                '}';
     }
 }

@@ -15,27 +15,26 @@ import java.util.List;
  * @version 1.0
  * @since 05/02/23
  */
-@Entity(tableName = "hymn_verse", foreignKeys = @ForeignKey(entity = Hymn.class, parentColumns = "id", childColumns = "hymn_id", onDelete = ForeignKey.CASCADE))
+@Entity(tableName = "hymn_verse", foreignKeys = @ForeignKey(entity = Hymn.class, parentColumns = "id", childColumns = "hymn_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
 public class HymnVerse implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Integer id;
+    private long id;
     @ColumnInfo(name = "verse_number", defaultValue = "0")
     private byte verseNumber;
     @ColumnInfo(name = "is_chorus")
     private boolean isChorus;
     @ColumnInfo(name = "hymn_id", index = true)
-    private int hymnId;
+    private long hymnId;
 
     // To be used only when data is fetched from the server.
     @Ignore
     private List<HymnVerseLine> hymnVerseLines;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(@NonNull Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -52,17 +51,16 @@ public class HymnVerse implements Serializable {
     }
 
     public void setChorus(boolean chorus) {
-        this.isChorus = chorus;
+        isChorus = chorus;
     }
 
-    public int getHymnId() {
+    public long getHymnId() {
         return hymnId;
     }
 
-    public void setHymnId(int hymnId) {
+    public void setHymnId(long hymnId) {
         this.hymnId = hymnId;
     }
-
 
     public List<HymnVerseLine> getHymnVerseLines() {
         return hymnVerseLines;
@@ -70,5 +68,17 @@ public class HymnVerse implements Serializable {
 
     public void setHymnVerseLines(List<HymnVerseLine> hymnVerseLines) {
         this.hymnVerseLines = hymnVerseLines;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "HymnVerse{" +
+                "id=" + id +
+                ", verseNumber=" + verseNumber +
+                ", isChorus=" + isChorus +
+                ", hymnId=" + hymnId +
+                ", hymnVerseLines=" + hymnVerseLines +
+                '}';
     }
 }
