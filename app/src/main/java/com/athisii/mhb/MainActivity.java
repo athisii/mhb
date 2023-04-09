@@ -44,13 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.appBarMain.switcher.setOnCheckedChangeListener((buttonView, isChecked) -> switchMode(isChecked));
         addBottomNavigationListener();
-        // TODO: remove this
-        // gets database instance
+
         App application = (App) getApplication();
-//        new HymnRepository(application).fetchHymns();
         ForkJoinPool.commonPool().execute(() -> {
-            List<Hymn> hymns = application.getDatabase().hymnDao().getHymns();
-            Log.d("info", "Data: " + hymns);
+            List<Hymn> hymns = application.getRepository().getAllHymns();
+            Log.d("info", "*************** Hymns ******************\n" + hymns);
         });
     }
 

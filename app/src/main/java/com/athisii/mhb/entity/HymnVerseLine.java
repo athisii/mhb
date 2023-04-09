@@ -30,7 +30,7 @@ public class HymnVerseLine implements Serializable {
     @ColumnInfo(name = "english", defaultValue = "Not Available")
     @SerializedName("e")
     private String english;
-    @ColumnInfo(name = "hymn_verse_id")
+    @ColumnInfo(name = "hymn_verse_id", index = true)
     private int hymnVerseId;
 
     public Integer getId() {

@@ -1,7 +1,5 @@
 package com.athisii.mhb.network;
 
-import com.athisii.mhb.dto.BibleResDto;
-import com.athisii.mhb.dto.HymnResDto;
 import com.athisii.mhb.dto.ResponseDto;
 import com.athisii.mhb.entity.Hymn;
 
@@ -19,8 +17,5 @@ public interface ApiClient {
     Call<ResponseDto<List<Hymn>>> hymns();
 
     @GET("hymn")
-    Call<ResponseDto<List<HymnResDto>>> hymns(@Query("page") int page, @Query("pageSize") int pageSize);
-
-    @GET("bible")
-    Call<ResponseDto<List<BibleResDto>>> bible();
+    Call<ResponseDto<List<Hymn>>> hymns(@Query("page") int page, @Query("size") int size);
 }

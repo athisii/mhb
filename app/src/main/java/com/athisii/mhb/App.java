@@ -3,34 +3,33 @@ package com.athisii.mhb;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
-import androidx.room.Room;
-
-import com.athisii.mhb.database.AppDatabase;
 import com.athisii.mhb.network.ApiClient;
+import com.athisii.mhb.repository.Repository;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
-    private AppDatabase database;
+    private static final String PROPERTY_FILE = "app.properties";
+    private Repository repository;
     private ApiClient apiClient;
-    OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS) // Set your desired timeout value in seconds
-            .build();
+
     private Handler handler;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        database = Room.databaseBuilder(this, AppDatabase.class, "app_db").build();
-    }
-
-    public AppDatabase getDatabase() {
-        return database;
+        repository = Repository.getInstance(this);
+        var sharedPreferences = getSharedPreferences(PROPERTY_FILE, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("is.initial.setup", true)) {
+            Log.d("info", "********** Initial Setup **************");
+            sharedPreferences.edit().putBoolean("is.initial.setup", false).apply();
+            getApiClient();
+            repository.deleteAllHymnsInDb();
+            repository.fetchHymnsFromServer();
+        }
     }
 
     public ApiClient getApiClient() {
@@ -38,7 +37,6 @@ public class App extends Application {
             if (apiClient == null) {
                 apiClient = new Retrofit.Builder()
                         .baseUrl(ApiClient.BASE_URL)
-                        .client(okHttpClient)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
                         .create(ApiClient.class);
@@ -52,5 +50,9 @@ public class App extends Application {
             handler = new Handler(Looper.getMainLooper());
         }
         return handler;
+    }
+
+    public Repository getRepository() {
+        return repository;
     }
 }

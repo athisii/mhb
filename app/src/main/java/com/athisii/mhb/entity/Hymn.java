@@ -30,6 +30,7 @@ public class Hymn implements Serializable {
     @SerializedName("et")
     private String englishTitle;
 
+    // To be used only when data is fetched from the server.
     @Ignore
     @SerializedName("hVs")
     List<HymnVerse> hymnVerses;

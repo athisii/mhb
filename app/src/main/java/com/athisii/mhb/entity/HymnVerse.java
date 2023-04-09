@@ -28,8 +28,10 @@ public class HymnVerse implements Serializable {
     @ColumnInfo(name = "is_chorus")
     @SerializedName("ic")
     private boolean isChorus;
-    @ColumnInfo(name = "hymn_id")
+    @ColumnInfo(name = "hymn_id", index = true)
     private int hymnId;
+
+    // To be used only when data is fetched from the server.
     @Ignore
     @SerializedName("hVLs")
     List<HymnVerseLine> hymnVerseLines;
