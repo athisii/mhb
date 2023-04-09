@@ -1,11 +1,10 @@
-package com.athisii.mhb.repository;
+package com.athisii.mhb.database;
 
 import android.widget.Toast;
 
 import androidx.room.Room;
 
 import com.athisii.mhb.App;
-import com.athisii.mhb.database.AppDatabase;
 import com.athisii.mhb.entity.BibleBook;
 import com.athisii.mhb.entity.Hymn;
 import com.google.gson.Gson;
@@ -15,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 
 public class Repository {
     int size;
@@ -54,14 +52,6 @@ public class Repository {
         return repository;
     }
 
-    public void deleteAllHymnsInDb() {
-        ForkJoinPool.commonPool().execute(() -> database.hymnDao().deleteAll());
-    }
-
-    public List<Hymn> getAllHymns() {
-        return database.hymnDao().getAllHymns();
-    }
-
     public void saveDataToDb(FileType fileType) {
         String jsonString;
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(application.getAssets().open(fileType.getValue())))) {
@@ -79,21 +69,21 @@ public class Repository {
         if (FileType.HYMN == fileType) {
             List<Hymn> hymns = GSON.fromJson(jsonString, new TypeToken<List<Hymn>>() {
             }.getType());
-            insertHymns(hymns);
+            insertHymn(hymns);
         } else {
             List<BibleBook> bibleBooks = GSON.fromJson(jsonString, new TypeToken<List<BibleBook>>() {
             }.getType());
-            insertBible(bibleBooks);
+            insertBibleBook(bibleBooks);
         }
     }
 
-    public void insertHymns(List<Hymn> hymns) {
+    public void insertHymn(List<Hymn> hymns) {
         database.hymnDao().insertHymns(hymns);
     }
 
-    public void insertBible(List<BibleBook> bibleBook) {
-        if (!bibleBook.isEmpty()) {
-            database.bibleBookDao().insertBibleBook(bibleBook);
+    public void insertBibleBook(List<BibleBook> bibleBooks) {
+        if (!bibleBooks.isEmpty()) {
+            database.bibleBookDao().insertBibleBook(bibleBooks);
         }
     }
 

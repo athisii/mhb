@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.athisii.mhb.repository.Repository;
-import com.athisii.mhb.repository.Repository.FileType;
+import com.athisii.mhb.database.Repository;
+import com.athisii.mhb.database.Repository.FileType;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

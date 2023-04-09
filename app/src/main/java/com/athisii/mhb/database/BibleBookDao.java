@@ -1,4 +1,4 @@
-package com.athisii.mhb.database.dao;
+package com.athisii.mhb.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
