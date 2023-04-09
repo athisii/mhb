@@ -7,8 +7,6 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,18 +21,15 @@ public class HymnVerse implements Serializable {
     @NonNull
     private Integer id;
     @ColumnInfo(name = "verse_number", defaultValue = "0")
-    @SerializedName("vn")
     private byte verseNumber;
     @ColumnInfo(name = "is_chorus")
-    @SerializedName("ic")
     private boolean isChorus;
     @ColumnInfo(name = "hymn_id", index = true)
     private int hymnId;
 
     // To be used only when data is fetched from the server.
     @Ignore
-    @SerializedName("hVLs")
-    List<HymnVerseLine> hymnVerseLines;
+    private List<HymnVerseLine> hymnVerseLines;
 
     public Integer getId() {
         return id;
@@ -75,17 +70,5 @@ public class HymnVerse implements Serializable {
 
     public void setHymnVerseLines(List<HymnVerseLine> hymnVerseLines) {
         this.hymnVerseLines = hymnVerseLines;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "HymnVerse{" +
-                "id=" + id +
-                ", verseNumber=" + verseNumber +
-                ", isChorus=" + isChorus +
-                ", hymnId=" + hymnId +
-                ", hymnVerseLines=" + hymnVerseLines +
-                '}';
     }
 }

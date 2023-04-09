@@ -1,7 +1,6 @@
 package com.athisii.mhb;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +10,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.athisii.mhb.databinding.ActivityMainBinding;
-import com.athisii.mhb.entity.Hymn;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ForkJoinPool;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,12 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding.appBarMain.switcher.setOnCheckedChangeListener((buttonView, isChecked) -> switchMode(isChecked));
         addBottomNavigationListener();
-
-        App application = (App) getApplication();
-        ForkJoinPool.commonPool().execute(() -> {
-            List<Hymn> hymns = application.getRepository().getAllHymns();
-            Log.d("info", "*************** Hymns ******************\n" + hymns);
-        });
     }
 
 

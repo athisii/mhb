@@ -7,8 +7,6 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,22 +16,18 @@ public class Hymn implements Serializable {
     @NonNull
     private Integer id;
     @ColumnInfo(name = "hymn_number", defaultValue = "0")
-    @SerializedName("hn")
     private short hymnNumber;
     @ColumnInfo(name = "is_favourite", index = true)
     private boolean isFavorite;
-    @ColumnInfo(name = "maola_title", index = true, defaultValue = "Not Available")
-    @SerializedName("mt")
+    @ColumnInfo(name = "maola_title", index = true, defaultValue = "NA")
     private String maolaTitle;
 
-    @ColumnInfo(name = "english_title", index = true, defaultValue = "Not Available")
-    @SerializedName("et")
+    @ColumnInfo(name = "english_title", index = true, defaultValue = "NA")
     private String englishTitle;
 
     // To be used only when data is fetched from the server.
     @Ignore
-    @SerializedName("hVs")
-    List<HymnVerse> hymnVerses;
+    private List<HymnVerse> hymnVerses;
 
     public void setId(@NonNull Integer id) {
         this.id = id;
@@ -81,18 +75,5 @@ public class Hymn implements Serializable {
 
     public void setHymnVerses(List<HymnVerse> hymnVerses) {
         this.hymnVerses = hymnVerses;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Hymn{" +
-                "id=" + id +
-                ", hymnNumber=" + hymnNumber +
-                ", isFavorite=" + isFavorite +
-                ", maolaTitle='" + maolaTitle + '\'' +
-                ", englishTitle='" + englishTitle + '\'' +
-                ", hymnVerses=" + hymnVerses +
-                '}';
     }
 }

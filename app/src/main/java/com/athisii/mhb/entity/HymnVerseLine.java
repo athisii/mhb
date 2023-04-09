@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 
@@ -22,13 +20,10 @@ public class HymnVerseLine implements Serializable {
     @NonNull
     private Integer id;
     @ColumnInfo(name = "serial_number", defaultValue = "0")
-    @SerializedName("sn")
     private byte serialNumber;
     @ColumnInfo(name = "maola", defaultValue = "Not Available")
-    @SerializedName("m")
     private String maola;
     @ColumnInfo(name = "english", defaultValue = "Not Available")
-    @SerializedName("e")
     private String english;
     @ColumnInfo(name = "hymn_verse_id", index = true)
     private int hymnVerseId;
@@ -73,15 +68,4 @@ public class HymnVerseLine implements Serializable {
         this.hymnVerseId = hymnVerseId;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "HymnVerseLine{" +
-                "id=" + id +
-                ", serialNumber=" + serialNumber +
-                ", maola='" + maola + '\'' +
-                ", english='" + english + '\'' +
-                ", hymnVerseId=" + hymnVerseId +
-                '}';
-    }
 }

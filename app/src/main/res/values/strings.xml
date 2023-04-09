@@ -11,11 +11,12 @@
     <string name="favourite">Favourites</string>
     <string name="compose">Compose</string>
     <string name="hymn">HYM</string>
-    <string name="bible">BIB</string>
+    <string name="bibleBook">BIB</string>
     <string name="bookmark">Bookmark</string>
     <string name="compose_song_fragment">COMPOSE SONG FRAGMENT</string>
     <string name="favourite_song_fragment">FAVOURITE SONG FRAGMENT</string>
     <string name="home_song_fragment">HOME SONG FRAGMENT</string>
     <string name="bookmark_bible_fragment">BOOKMARK BIBLE FRAGMENT</string>
     <string name="home_bible_fragment">HOME BIBLE FRAGMENT</string>
+    <string name="bible">BIB</string>
 </resources>

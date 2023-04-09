@@ -1,33 +1,47 @@
 package com.athisii.mhb.repository;
 
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.athisii.mhb.App;
 import com.athisii.mhb.database.AppDatabase;
-import com.athisii.mhb.dto.ResponseDto;
+import com.athisii.mhb.entity.BibleBook;
 import com.athisii.mhb.entity.Hymn;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Repository {
     int size;
     private static final String DB_NAME = "app_db";
-    private static final short NUM_OF_HYMN = 1000;
-    private static final short NUM_OF_HYMN_PER_REQUEST = 100;
-    private static final short NUM_OF_REQUEST = NUM_OF_HYMN / NUM_OF_HYMN_PER_REQUEST;
+    private static final Gson GSON = new Gson();
+
+
+    public enum FileType {
+        HYMN("hymn_data.json"),
+        BIBLE("bible_data.json");
+        private final String value;
+
+        FileType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     private final App application;
     private final AppDatabase database;
     private static Repository repository;
 
+    // Singleton pattern
     private Repository(App application) {
         this.application = application;
         database = Room.databaseBuilder(application, AppDatabase.class, DB_NAME).build();
@@ -40,44 +54,49 @@ public class Repository {
         return repository;
     }
 
-
-    public void fetchHymnsFromServer() {
-        for (short page = 0; page < NUM_OF_REQUEST; page++) {
-            application.getApiClient().hymns(page, NUM_OF_HYMN_PER_REQUEST).enqueue(new MyCallback());
-        }
-    }
-
-    private class MyCallback implements Callback<ResponseDto<List<Hymn>>> {
-        @Override
-        public void onResponse(@NonNull Call<ResponseDto<List<Hymn>>> call, @NonNull Response<ResponseDto<List<Hymn>>> response) {
-            if (response.isSuccessful() && (response.body() != null) && (response.body().isStatus())) {
-                insertHymn(response.body().getData());
-                Toast.makeText(application, "Data fetched successfully.", Toast.LENGTH_SHORT).show();
-                return;
-            }// else something went wrong.
-            Toast.makeText(application, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<ResponseDto<List<Hymn>>> call, @NonNull Throwable t) {
-            Toast.makeText(application, "Not connected to internet or connection not stable.", Toast.LENGTH_LONG).show();
-        }
-
-        private void insertHymn(List<Hymn> hymns) {
-            ForkJoinPool.commonPool().execute(() -> {
-                size += hymns.size();
-                Log.d("info", "**********Size: " + size);
-                database.hymnDao().insertHymns(hymns);
-            });
-        }
-    }
-
     public void deleteAllHymnsInDb() {
-        database.hymnDao().deleteAllHymns();
+        ForkJoinPool.commonPool().execute(() -> database.hymnDao().deleteAllHymns());
     }
 
     public List<Hymn> getAllHymns() {
         return database.hymnDao().getAllHymns();
+    }
+
+    public void saveDataToDb(FileType fileType) {
+        String jsonString;
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(application.getAssets().open(fileType.getValue())))) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            jsonString = stringBuilder.toString();
+        } catch (IOException e) {
+            application.getHandler().post(() -> Toast.makeText(application, "Something went wrong.", Toast.LENGTH_LONG).show());
+            return;
+        }
+
+        if (FileType.HYMN == fileType) {
+            List<Hymn> hymns = GSON.fromJson(jsonString, new TypeToken<List<Hymn>>() {
+            }.getType());
+            insertHymns(hymns);
+        } else {
+            List<BibleBook> bibleBooks = GSON.fromJson(jsonString, new TypeToken<List<BibleBook>>() {
+            }.getType());
+            insertBible(bibleBooks);
+        }
+    }
+
+    public void insertHymns(List<Hymn> hymns) {
+        if (!hymns.isEmpty()) {
+            database.hymnDao().insertHymns(hymns);
+        }
+    }
+
+    public void insertBible(List<BibleBook> bibleBook) {
+        if (!bibleBook.isEmpty()) {
+            database.bibleBookDao().insertBibleBook(bibleBook);
+        }
     }
 
 }
