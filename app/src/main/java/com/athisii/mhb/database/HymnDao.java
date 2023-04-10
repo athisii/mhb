@@ -1,5 +1,6 @@
 package com.athisii.mhb.database;
 
+import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -18,10 +19,7 @@ import java.util.Map;
 public interface HymnDao {
 
     @Query("SELECT * FROM hymn ORDER BY hymn_number")
-    List<Hymn> getAllHymns();
-
-    @Query("SELECT * FROM hymn WHERE id = :id")
-    Hymn getHymn(long id);
+    PagingSource<Integer, Hymn> getPaginatedHymns();
 
     @Query("SELECT * FROM hymn_verse WHERE hymn_id = :hymnId")
     List<HymnVerse> getHymnVerses(long hymnId);
@@ -56,7 +54,7 @@ public interface HymnDao {
     }
 
     @Transaction
-    default Map<HymnVerse, List<HymnVerseLine>> getHymnContent(long hymnId) {
+    default Map<HymnVerse, List<HymnVerseLine>> getHymnContentById(long hymnId) {
         Map<HymnVerse, List<HymnVerseLine>> hymnContentMap = new HashMap<>();
         List<HymnVerse> hymnVerses = getHymnVerses(hymnId);
         for (HymnVerse hymnVerse : hymnVerses) {
@@ -69,7 +67,4 @@ public interface HymnDao {
     @Query("SELECT * FROM hymn WHERE hymn_number LIKE :search OR maola_title LIKE :search " +
             "OR english_title LIKE :search")
     List<Hymn> searchHymn(String search);
-
-    @Query("DELETE FROM hymn")
-    void deleteAll();
 }

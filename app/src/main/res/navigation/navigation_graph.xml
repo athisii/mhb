@@ -6,27 +6,43 @@
     app:startDestination="@id/home_hymn_fragment">
     <fragment
         android:id="@+id/home_hymn_fragment"
-        android:name="com.athisii.mhb.ui.hymn.HomeHymnFragment"
+        android:name="com.athisii.mhb.ui.fragment.HomeHymnFragment"
         android:label="Hymn"
-        tools:layout="@layout/fragment_home_hymn" />
+        tools:layout="@layout/fragment_home_hymn">
+        <action
+            android:id="@+id/action_home_hymn_fragment_to_detail_hymn_fragment"
+            app:destination="@id/detail_hymn_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/favourite_hymn_fragment"
-        android:name="com.athisii.mhb.ui.hymn.FavouriteHymnFragment"
+        android:name="com.athisii.mhb.ui.fragment.FavouriteHymnFragment"
         android:label="Favourite"
         tools:layout="@layout/fragment_favourite_hymn" />
     <fragment
         android:id="@+id/compose_song_fragment"
-        android:name="com.athisii.mhb.ui.hymn.ComposeSongFragment"
+        android:name="com.athisii.mhb.ui.fragment.ComposeSongFragment"
         android:label="Compose"
         tools:layout="@layout/fragment_compose_song" />
     <fragment
         android:id="@+id/home_bible_fragment"
-        android:name="com.athisii.mhb.ui.bible.HomeBibleFragment"
+        android:name="com.athisii.mhb.ui.fragment.HomeBibleFragment"
         android:label="Bible"
         tools:layout="@layout/fragment_home_bible" />
     <fragment
         android:id="@+id/bookmark_bible_fragment"
-        android:name="com.athisii.mhb.ui.bible.BookmarkBibleFragment"
+        android:name="com.athisii.mhb.ui.fragment.BookmarkBibleFragment"
         android:label="Bookmark"
         tools:layout="@layout/fragment_bookmark_bible" />
+    <fragment
+        android:id="@+id/detail_hymn_fragment"
+        android:name="com.athisii.mhb.ui.fragment.DetailHymnFragment"
+        android:label="Detail Hymn"
+        tools:layout="@layout/fragment_detail_hymn">
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <argument
+            android:name="hymnNumber"
+            app:argType="integer" />
+    </fragment>
 </navigation>

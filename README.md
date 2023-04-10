@@ -1,2 +1,2 @@
-# mhb
+# MHB
 Maola Hymn Bible

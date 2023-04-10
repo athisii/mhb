@@ -2,11 +2,17 @@ package com.athisii.mhb.database;
 
 import android.widget.Toast;
 
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
+import androidx.paging.PagingData;
+import androidx.paging.rxjava3.PagingRx;
 import androidx.room.Room;
 
 import com.athisii.mhb.App;
 import com.athisii.mhb.entity.BibleBook;
 import com.athisii.mhb.entity.Hymn;
+import com.athisii.mhb.entity.HymnVerse;
+import com.athisii.mhb.entity.HymnVerseLine;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -14,6 +20,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
+
+import io.reactivex.rxjava3.core.Flowable;
 
 public class Repository {
     int size;
@@ -51,6 +60,16 @@ public class Repository {
         }
         return repository;
     }
+
+    public Flowable<PagingData<Hymn>> getPagingDataFlow() {
+        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(10, 10, false, 30, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().getPaginatedHymns());
+        return PagingRx.getFlowable(pager);
+    }
+
+    public Map<HymnVerse, List<HymnVerseLine>> getHymnContentById(long id) {
+        return database.hymnDao().getHymnContentById(id);
+    }
+
 
     public void saveDataToDb(FileType fileType) {
         String jsonString;
