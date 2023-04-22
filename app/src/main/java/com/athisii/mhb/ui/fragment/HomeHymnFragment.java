@@ -19,12 +19,12 @@ import com.athisii.mhb.ui.viewmodel.HomeHymnViewModelFactory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class HomeHymnFragment extends Fragment {
-    private HomeHymnViewModel viewModel;
-    private HymnPagingDataAdapter hymnPagingDataAdapter;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        HymnPagingDataAdapter hymnPagingDataAdapter;
+        HomeHymnViewModel viewModel;
         var binding = FragmentHomeHymnBinding.inflate(inflater);
         var application = (App) requireActivity().getApplication();
         viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HomeHymnViewModel.class);
@@ -32,7 +32,7 @@ public class HomeHymnFragment extends Fragment {
             if (hymn != null) {
                 Navigation.findNavController(requireView()).navigate(HomeHymnFragmentDirections.actionHomeHymnFragmentToDetailHymnFragment(hymn.getId(), hymn.getHymnNumber()));
             }
-        });
+        }, application);
 
         disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
         binding.recyclerView.setAdapter(hymnPagingDataAdapter);

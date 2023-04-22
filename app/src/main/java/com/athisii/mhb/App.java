@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class App extends Application {
     public static final String PROPERTY_FILE = "app.properties";
-    public static final String IS_SONG_LANG_ENGLISH = "is.song.lang.english";
+    public static final String IS_LANGUAGE_ENGLISH = "is.language.english";
     public static final String IS_INITIAL_SETUP = "is.initial.setup";
     private SharedPreferences sharedPreferences;
     private Repository repository;
@@ -31,7 +31,7 @@ public class App extends Application {
             threadPoolExecutor.execute(() -> repository.saveDataToDb(FileType.HYMN));
 //            threadPoolExecutor.execute(() -> repository.saveDataToDb(FileType.BIBLE))
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(IS_SONG_LANG_ENGLISH, false);
+            editor.putBoolean(IS_LANGUAGE_ENGLISH, false);
             editor.putBoolean(IS_INITIAL_SETUP, false);
             editor.apply();
             threadPoolExecutor.shutdown();
