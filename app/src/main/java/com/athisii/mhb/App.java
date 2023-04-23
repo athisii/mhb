@@ -16,6 +16,9 @@ public class App extends Application {
     public static final String PROPERTY_FILE = "app.properties";
     public static final String IS_LANGUAGE_ENGLISH = "is.language.english";
     public static final String IS_INITIAL_SETUP = "is.initial.setup";
+    public static final String FONT_SIZE = "font.size";
+    // for keeping track of last visited page in HomeHymn List
+    private int currentHymnNumber = 1;
     private SharedPreferences sharedPreferences;
     private Repository repository;
 
@@ -33,6 +36,7 @@ public class App extends Application {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(IS_LANGUAGE_ENGLISH, false);
             editor.putBoolean(IS_INITIAL_SETUP, false);
+            editor.putInt(FONT_SIZE, 16);
             editor.apply();
             threadPoolExecutor.shutdown();
             // can wait for termination if wanted. that way all db will be initialized before activity startup.
@@ -54,4 +58,13 @@ public class App extends Application {
     public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
+
+    public int getCurrentHymnNumber() {
+        return currentHymnNumber;
+    }
+
+    public void setCurrentHymnNumber(int hymnNumber) {
+        currentHymnNumber = hymnNumber;
+    }
+
 }

@@ -62,7 +62,7 @@ public class Repository {
     }
 
     public Flowable<PagingData<Hymn>> getPagingDataFlow() {
-        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(10, 10, false, 30, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().getPaginatedHymns());
+        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(13, 13, false, 30, PagingConfig.MAX_SIZE_UNBOUNDED), application.getCurrentHymnNumber() - 1, () -> database.hymnDao().getPaginatedHymns());
         return PagingRx.getFlowable(pager);
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -24,11 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/roboto"
-            android:textStyle="bold"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@{` `+ hymn.hymnNumber +` | `+ (isLanguageEnglish==true?hymn.englishTitle:hymn.maolaTitle)}"
             android:textSize="@dimen/font_size"
+            android:textStyle="bold"
             tools:text="Maola Title" />
 
     </androidx.cardview.widget.CardView>

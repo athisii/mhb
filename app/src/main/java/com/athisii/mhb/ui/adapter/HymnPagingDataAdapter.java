@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.athisii.mhb.App;
+import com.athisii.mhb.R;
 import com.athisii.mhb.databinding.RecyclerviewItemBinding;
 import com.athisii.mhb.entity.Hymn;
 
@@ -31,16 +32,14 @@ public class HymnPagingDataAdapter extends PagingDataAdapter<Hymn, HymnPagingDat
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int color;
         Hymn hymn = getItem(position);
         holder.itemView.setOnClickListener(view -> listener.onClick(hymn));
         holder.binding.setHymn(hymn);
         if (position % 2 == 0) {
-            color = Color.WHITE;
+            holder.binding.cardView.setCardBackgroundColor(Color.WHITE);
         } else {
-            color = Color.LTGRAY;
+            holder.binding.cardView.setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.grey, null));
         }
-        holder.binding.cardView.setCardBackgroundColor(color);
         holder.binding.setIsLanguageEnglish(app.getSharedPreferences().getBoolean(App.IS_LANGUAGE_ENGLISH, false));
     }
 
