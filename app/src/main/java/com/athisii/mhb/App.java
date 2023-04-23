@@ -17,8 +17,6 @@ public class App extends Application {
     public static final String IS_LANGUAGE_ENGLISH = "is.language.english";
     public static final String IS_INITIAL_SETUP = "is.initial.setup";
     public static final String FONT_SIZE = "font.size";
-    // for keeping track of last visited page in HomeHymn List
-    private int currentHymnNumber = 1;
     private SharedPreferences sharedPreferences;
     private Repository repository;
 
@@ -58,13 +56,4 @@ public class App extends Application {
     public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
-
-    public int getCurrentHymnNumber() {
-        return currentHymnNumber;
-    }
-
-    public void setCurrentHymnNumber(int hymnNumber) {
-        currentHymnNumber = hymnNumber;
-    }
-
 }

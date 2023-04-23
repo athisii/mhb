@@ -1,6 +1,7 @@
 package com.athisii.mhb.ui.adapter;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

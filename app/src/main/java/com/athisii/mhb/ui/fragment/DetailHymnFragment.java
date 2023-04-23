@@ -14,12 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.athisii.mhb.App;
-import com.athisii.mhb.R;
+import com.athisii.mhb.MainActivity;
 import com.athisii.mhb.databinding.FragmentDetailHymnBinding;
 import com.athisii.mhb.entity.HymnVerse;
 import com.athisii.mhb.entity.HymnVerseLine;
@@ -32,7 +31,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 
 public class DetailHymnFragment extends Fragment {
-    private AppCompatActivity parentActivity;
+    private MainActivity parentActivity;
     private App application;
     private FragmentDetailHymnBinding binding;
     private Map<HymnVerse, List<HymnVerseLine>> hymnContentMap;
@@ -58,12 +57,17 @@ public class DetailHymnFragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         long hymnId = DetailHymnFragmentArgs.fromBundle(requireArguments()).getId();
         int hymnNumber = DetailHymnFragmentArgs.fromBundle(requireArguments()).getHymnNumber();
-        parentActivity = (AppCompatActivity) requireActivity();
+
+        parentActivity = (MainActivity) requireActivity();
         Objects.requireNonNull(parentActivity.getSupportActionBar()).setTitle(hymnNumber + "");
         binding.setLifecycleOwner(getViewLifecycleOwner());
         application = (App) parentActivity.getApplication();
-        // for keeping track of last visited page in HomeHymn List
-        application.setCurrentHymnNumber(hymnNumber);
+
+        //hides bottom  navigation
+        parentActivity.getBinding().appBarMain.babMain.setVisibility(View.GONE);
+        // if user immediately selects an item after scrolling, toolbar becomes invisible; should always show
+        parentActivity.getBinding().appBarMain.ablMain.setVisibility(View.VISIBLE);
+
         ForkJoinPool.commonPool().execute(() -> {
             hymnContentMap = application.getRepository().getHymnContentById(hymnId);
             hymnContentMap.keySet().stream().filter(HymnVerse::isChorus).findFirst().ifPresent(hymnVerse -> chorus = hymnContentMap.get(hymnVerse));
@@ -103,7 +107,7 @@ public class DetailHymnFragment extends Fragment {
         LinearLayout cardViewLinearLayout = new LinearLayout(parentActivity);
         cardViewLinearLayout.setOrientation(LinearLayout.VERTICAL);
         cardViewLinearLayout.setLayoutParams(linearLayoutParams);
-        cardViewLinearLayout.setPadding(0,40,0,40);
+        cardViewLinearLayout.setPadding(0, 40, 0, 40);
         addHymnVerseLineOnCardViewLinearLayout(hymnVerseLines, cardViewLinearLayout, isChorus);
         cardView.addView(cardViewLinearLayout);
         binding.linearLayout.addView(cardView);
@@ -125,6 +129,11 @@ public class DetailHymnFragment extends Fragment {
             tv.setPadding(20, 5, 20, 5);
             cardViewLinearLayout.addView(tv);
         }
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        parentActivity.getBinding().appBarMain.babMain.setVisibility(View.VISIBLE);
     }
 }

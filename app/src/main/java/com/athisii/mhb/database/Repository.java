@@ -27,6 +27,7 @@ import io.reactivex.rxjava3.core.Flowable;
 public class Repository {
     int size;
     private static final String DB_NAME = "app_db";
+    public static final int PAGE_SIZE = 13;
     private static final Gson GSON = new Gson();
 
 
@@ -62,14 +63,13 @@ public class Repository {
     }
 
     public Flowable<PagingData<Hymn>> getPagingDataFlow() {
-        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(13, 13, false, 30, PagingConfig.MAX_SIZE_UNBOUNDED), application.getCurrentHymnNumber() - 1, () -> database.hymnDao().getPaginatedHymns());
+        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(PAGE_SIZE, 39, false, 39, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().getPaginatedHymns());
         return PagingRx.getFlowable(pager);
     }
 
     public Map<HymnVerse, List<HymnVerseLine>> getHymnContentById(long id) {
         return database.hymnDao().getHymnContentById(id);
     }
-
 
     public void saveDataToDb(FileType fileType) {
         String jsonString;
@@ -104,6 +104,11 @@ public class Repository {
         if (!bibleBooks.isEmpty()) {
             database.bibleBookDao().insertBibleBook(bibleBooks);
         }
+    }
+
+    public Flowable<PagingData<Hymn>> searchHymn(String query) {
+        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(PAGE_SIZE, 39, false, 39, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().searchHymn(query));
+        return PagingRx.getFlowable(pager);
     }
 
 }

@@ -20,5 +20,9 @@ public class HomeHymnViewModel extends ViewModel {
         return application.getRepository().getPagingDataFlow();
     }
 
+    public Flowable<PagingData<Hymn>> searchHymn(String query) {
+        return application.getRepository().searchHymn(query);
+    }
+
 
 }

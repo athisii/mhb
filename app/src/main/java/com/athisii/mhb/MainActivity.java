@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         addBottomNavigationListener();
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
@@ -78,5 +77,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    public ActivityMainBinding getBinding() {
+        return binding;
+    }
 }

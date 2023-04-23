@@ -66,5 +66,5 @@ public interface HymnDao {
 
     @Query("SELECT * FROM hymn WHERE hymn_number LIKE :search OR maola_title LIKE :search " +
             "OR english_title LIKE :search")
-    List<Hymn> searchHymn(String search);
+    PagingSource<Integer, Hymn> searchHymn(String search);
 }
