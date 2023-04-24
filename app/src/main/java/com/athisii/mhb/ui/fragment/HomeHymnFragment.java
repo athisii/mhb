@@ -110,7 +110,6 @@ public class HomeHymnFragment extends Fragment {
     }
 
     private void searchQuery(String query) {
-        Log.d("info", "*********Inside SearchQuery: ");
         if (query.isBlank()) {
             disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
             return;

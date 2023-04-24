@@ -65,8 +65,6 @@ public class DetailHymnFragment extends Fragment {
 
         //hides bottom  navigation
         parentActivity.getBinding().appBarMain.babMain.setVisibility(View.GONE);
-        // if user immediately selects an item after scrolling, toolbar becomes invisible; should always show
-        parentActivity.getBinding().appBarMain.ablMain.setVisibility(View.VISIBLE);
 
         ForkJoinPool.commonPool().execute(() -> {
             hymnContentMap = application.getRepository().getHymnContentById(hymnId);
