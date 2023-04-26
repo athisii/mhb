@@ -1,7 +1,6 @@
 package com.athisii.mhb.ui.adapter;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -39,7 +38,7 @@ public class HymnPagingDataAdapter extends PagingDataAdapter<Hymn, HymnPagingDat
         if (position % 2 == 0) {
             holder.binding.cardView.setCardBackgroundColor(Color.WHITE);
         } else {
-            holder.binding.cardView.setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.grey, null));
+            holder.binding.cardView.setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.light_grey, null));
         }
         holder.binding.setIsLanguageEnglish(app.getSharedPreferences().getBoolean(App.IS_LANGUAGE_ENGLISH, false));
     }

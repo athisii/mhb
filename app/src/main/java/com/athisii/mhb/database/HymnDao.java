@@ -11,9 +11,10 @@ import com.athisii.mhb.entity.Hymn;
 import com.athisii.mhb.entity.HymnVerse;
 import com.athisii.mhb.entity.HymnVerseLine;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @Dao
 public interface HymnDao {
@@ -54,8 +55,8 @@ public interface HymnDao {
     }
 
     @Transaction
-    default Map<HymnVerse, List<HymnVerseLine>> getHymnContentById(long hymnId) {
-        Map<HymnVerse, List<HymnVerseLine>> hymnContentMap = new HashMap<>();
+    default SortedMap<HymnVerse, List<HymnVerseLine>> getHymnContentById(long hymnId) {
+        SortedMap<HymnVerse, List<HymnVerseLine>> hymnContentMap = new TreeMap<>();
         List<HymnVerse> hymnVerses = getHymnVerses(hymnId);
         for (HymnVerse hymnVerse : hymnVerses) {
             hymnContentMap.put(hymnVerse, getHymnVerseLine(hymnVerse.getId()));

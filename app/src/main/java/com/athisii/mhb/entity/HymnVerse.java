@@ -16,7 +16,7 @@ import java.util.List;
  * @since 05/02/23
  */
 @Entity(tableName = "hymn_verse", foreignKeys = @ForeignKey(entity = Hymn.class, parentColumns = "id", childColumns = "hymn_id", onUpdate = ForeignKey.CASCADE, onDelete = ForeignKey.CASCADE))
-public class HymnVerse implements Serializable {
+public class HymnVerse implements Serializable, Comparable<HymnVerse> {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "verse_number", defaultValue = "0")
@@ -80,5 +80,10 @@ public class HymnVerse implements Serializable {
                 ", hymnId=" + hymnId +
                 ", hymnVerseLines=" + hymnVerseLines +
                 '}';
+    }
+
+    @Override
+    public int compareTo(HymnVerse o) {
+        return this.verseNumber - o.verseNumber;
     }
 }

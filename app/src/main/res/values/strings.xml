@@ -22,4 +22,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Search</string>
+    <string name="en">EN</string>
+    <string name="ma">MA</string>
+    <string name="lang">Lang</string>
 </resources>

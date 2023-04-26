@@ -1,7 +1,6 @@
 package com.athisii.mhb.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +27,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class HomeHymnFragment extends Fragment {
     private MainActivity parentActivity;
+    private boolean fetchForEmptyString;
     private App application;
     private HymnPagingDataAdapter hymnPagingDataAdapter;
     private HomeHymnViewModel viewModel;
@@ -35,7 +35,7 @@ public class HomeHymnFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        fetchForEmptyString = false;
         var binding = FragmentHomeHymnBinding.inflate(inflater);
         parentActivity = (MainActivity) requireActivity();
         application = (App) parentActivity.getApplication();
@@ -50,16 +50,16 @@ public class HomeHymnFragment extends Fragment {
         disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
         binding.recyclerView.setAdapter(hymnPagingDataAdapter);
         binding.setLifecycleOwner(getViewLifecycleOwner());
-        addMenuItems();
+        addToolbarMenuItems();
         return binding.getRoot();
     }
 
-    private void addMenuItems() {
+    private void addToolbarMenuItems() {
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.toolbar_menu, menu);
-                MenuItem menuItem = menu.findItem(R.id.app_bar_search);
+                menuInflater.inflate(R.menu.toolbar_home_hymn_menu, menu);
+                MenuItem menuItem = menu.findItem(R.id.toolbar_home_hymn_search);
                 setListenerOnMenuItem(menuItem);
                 SearchView searchView = (SearchView) menuItem.getActionView();
                 setListenerOnSearchView(searchView);
@@ -67,13 +67,9 @@ public class HomeHymnFragment extends Fragment {
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.app_bar_search) {
-                    return true;
-                }
-                // else other menu items
-                return false;
+                return menuItem.getItemId() == R.id.toolbar_home_hymn_search;
             }
-        }, getViewLifecycleOwner());
+        }, getViewLifecycleOwner()); //life cycle aware
     }
 
     private void setListenerOnSearchView(SearchView searchView) {
@@ -111,9 +107,13 @@ public class HomeHymnFragment extends Fragment {
 
     private void searchQuery(String query) {
         if (query.isBlank()) {
-            disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
+            // don't fetch again when user click the search icon for the first time.
+            if (fetchForEmptyString) {
+                disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
+            }
             return;
         }
+        fetchForEmptyString = true;
         disposables.add(viewModel.searchHymn("%" + query + "%").subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
     }
 

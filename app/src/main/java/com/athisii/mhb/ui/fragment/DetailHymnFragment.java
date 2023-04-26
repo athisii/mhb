@@ -7,6 +7,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,19 +17,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
 import com.athisii.mhb.App;
 import com.athisii.mhb.MainActivity;
+import com.athisii.mhb.R;
 import com.athisii.mhb.databinding.FragmentDetailHymnBinding;
 import com.athisii.mhb.entity.HymnVerse;
 import com.athisii.mhb.entity.HymnVerseLine;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ForkJoinPool;
 
@@ -34,10 +40,11 @@ public class DetailHymnFragment extends Fragment {
     private MainActivity parentActivity;
     private App application;
     private FragmentDetailHymnBinding binding;
-    private Map<HymnVerse, List<HymnVerseLine>> hymnContentMap;
+    private SortedMap<HymnVerse, List<HymnVerseLine>> hymnContentSortedMap;
     private List<HymnVerseLine> chorus;
     private static final FrameLayout.LayoutParams cardViewLayoutParams;
     private static final FrameLayout.LayoutParams linearLayoutParams;
+    private static final ViewGroup.MarginLayoutParams marginLayout;
 
     static {
         // layout params for CardView
@@ -47,6 +54,10 @@ public class DetailHymnFragment extends Fragment {
         // layout params for CardView LinearLayout -- must use FrameLayout.LayoutParams
         linearLayoutParams = new FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         linearLayoutParams.gravity = Gravity.CENTER;
+
+        // for switch compat
+        marginLayout = new ViewGroup.MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        marginLayout.setMargins(20, 0, 0, 20);
     }
 
     @Override
@@ -67,8 +78,12 @@ public class DetailHymnFragment extends Fragment {
         parentActivity.getBinding().appBarMain.babMain.setVisibility(View.GONE);
 
         ForkJoinPool.commonPool().execute(() -> {
-            hymnContentMap = application.getRepository().getHymnContentById(hymnId);
-            hymnContentMap.keySet().stream().filter(HymnVerse::isChorus).findFirst().ifPresent(hymnVerse -> chorus = hymnContentMap.get(hymnVerse));
+            hymnContentSortedMap = application.getRepository().getHymnContentById(hymnId);
+            HymnVerse firstVerse = hymnContentSortedMap.firstKey();
+            if (firstVerse.isChorus()) {
+                chorus = hymnContentSortedMap.get(firstVerse);
+                hymnContentSortedMap.remove(firstVerse);
+            }
             countDownLatch.countDown();
         });
         try {
@@ -77,17 +92,15 @@ public class DetailHymnFragment extends Fragment {
             Thread.currentThread().interrupt();
         }
         displayHymnContent();
+        addToolbarMenuItems();
         return binding.getRoot();
     }
 
     private void displayHymnContent() {
         binding.linearLayout.removeAllViews();
-        hymnContentMap.keySet()
-                .stream()
-                .filter(hymnVerse -> !hymnVerse.isChorus())
-                .sorted(Comparator.comparingInt(HymnVerse::getVerseNumber))
-                .forEach(hymnVerse -> {
-                    createCardViewBox(hymnContentMap.get(hymnVerse), false);
+        hymnContentSortedMap
+                .forEach((hymnVerse, hymnVerseLines) -> {
+                    createCardViewBox(hymnVerseLines, false);
                     if (chorus != null) {
                         createCardViewBox(chorus, true);
                     }
@@ -127,6 +140,34 @@ public class DetailHymnFragment extends Fragment {
             tv.setPadding(20, 5, 20, 5);
             cardViewLinearLayout.addView(tv);
         }
+    }
+
+
+    private void addToolbarMenuItems() {
+        parentActivity.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.toolbar_detail_hymn_menu, menu);
+                MenuItem menuItem = menu.findItem(R.id.toolbar_detail_hymn_lang_switcher);
+                SwitchCompat switchCompat = (SwitchCompat) LayoutInflater.from(parentActivity).inflate(R.layout.detail_hymn_lang_switch_compat, null);
+                switchCompat.setChecked(!application.getSharedPreferences().getBoolean(App.IS_LANGUAGE_ENGLISH, false));
+                switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    application.getSharedPreferences().edit().putBoolean(App.IS_LANGUAGE_ENGLISH, !isChecked).apply();
+                    displayHymnContent();
+                });
+                menuItem.setActionView(switchCompat);
+
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.toolbar_detail_hymn_lang_switcher) {
+                    return true;
+                }
+                // else other menu items
+                return false;
+            }
+        }, getViewLifecycleOwner()); //life cycle aware
     }
 
     @Override
