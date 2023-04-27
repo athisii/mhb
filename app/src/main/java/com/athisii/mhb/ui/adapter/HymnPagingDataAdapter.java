@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.athisii.mhb.App;
 import com.athisii.mhb.R;
-import com.athisii.mhb.databinding.RecyclerviewItemBinding;
+import com.athisii.mhb.databinding.RecyclerviewHymnItemBinding;
 import com.athisii.mhb.entity.Hymn;
 
 public class HymnPagingDataAdapter extends PagingDataAdapter<Hymn, HymnPagingDataAdapter.ViewHolder> {
@@ -27,7 +27,7 @@ public class HymnPagingDataAdapter extends PagingDataAdapter<Hymn, HymnPagingDat
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(RecyclerviewItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(RecyclerviewHymnItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -44,9 +44,9 @@ public class HymnPagingDataAdapter extends PagingDataAdapter<Hymn, HymnPagingDat
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final RecyclerviewItemBinding binding;
+        private final RecyclerviewHymnItemBinding binding;
 
-        public ViewHolder(RecyclerviewItemBinding binding) {
+        public ViewHolder(RecyclerviewHymnItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

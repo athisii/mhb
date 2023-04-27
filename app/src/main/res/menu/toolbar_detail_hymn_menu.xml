@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/toolbar_detail_hymn_lang_switcher"
-        android:title="@string/lang"
+        android:id="@+id/fav_menu_item"
+        android:icon="@drawable/ic_favourite"
+        android:title="@string/fav"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/lang_switcher_menu_item"
+        android:title="@string/lang"
+        app:showAsAction="ifRoom" />
 </menu>

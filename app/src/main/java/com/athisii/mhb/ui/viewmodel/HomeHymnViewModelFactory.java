@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.athisii.mhb.App;
-import com.athisii.mhb.ui.viewmodel.HomeHymnViewModel;
 
 public class HomeHymnViewModelFactory implements ViewModelProvider.Factory {
     private final App app;
@@ -18,8 +17,8 @@ public class HomeHymnViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(HomeHymnViewModel.class)) {
-            return (T) new HomeHymnViewModel(app);
+        if (modelClass.isAssignableFrom(HymnViewModel.class)) {
+            return (T) new HymnViewModel(app);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

@@ -20,8 +20,8 @@ import com.athisii.mhb.MainActivity;
 import com.athisii.mhb.R;
 import com.athisii.mhb.databinding.FragmentHomeHymnBinding;
 import com.athisii.mhb.ui.adapter.HymnPagingDataAdapter;
-import com.athisii.mhb.ui.viewmodel.HomeHymnViewModel;
 import com.athisii.mhb.ui.viewmodel.HomeHymnViewModelFactory;
+import com.athisii.mhb.ui.viewmodel.HymnViewModel;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -30,7 +30,7 @@ public class HomeHymnFragment extends Fragment {
     private boolean fetchForEmptyString;
     private App application;
     private HymnPagingDataAdapter hymnPagingDataAdapter;
-    private HomeHymnViewModel viewModel;
+    private HymnViewModel viewModel;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
@@ -40,15 +40,15 @@ public class HomeHymnFragment extends Fragment {
         parentActivity = (MainActivity) requireActivity();
         application = (App) parentActivity.getApplication();
 
-        viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HomeHymnViewModel.class);
+        viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HymnViewModel.class);
         hymnPagingDataAdapter = new HymnPagingDataAdapter(hymn -> {
             if (hymn != null) {
-                Navigation.findNavController(requireView()).navigate(HomeHymnFragmentDirections.actionHomeHymnFragmentToDetailHymnFragment(hymn.getId(), hymn.getHymnNumber()));
+                Navigation.findNavController(requireView()).navigate(HomeHymnFragmentDirections.actionHomeHymnFragmentToDetailHymnFragment(hymn));
             }
         }, application);
 
         disposables.add(viewModel.getPagingDataFlow().subscribe(hymnPagingData -> hymnPagingDataAdapter.submitData(getLifecycle(), hymnPagingData)));
-        binding.recyclerView.setAdapter(hymnPagingDataAdapter);
+        binding.homeHymnRcv.recyclerView.setAdapter(hymnPagingDataAdapter);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         addToolbarMenuItems();
         return binding.getRoot();
@@ -118,9 +118,8 @@ public class HomeHymnFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         disposables.clear();
     }
-
 }

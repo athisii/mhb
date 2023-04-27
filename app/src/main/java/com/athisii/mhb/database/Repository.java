@@ -20,15 +20,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 
 import io.reactivex.rxjava3.core.Flowable;
 
 public class Repository {
-    int size;
-    private static final String DB_NAME = "app_db";
+    private static final int INITIAL_KEY = 0;
     public static final int PAGE_SIZE = 13;
+    private static final PagingConfig PAGING_CONFIG = new PagingConfig(PAGE_SIZE, 26, false, 26, PagingConfig.MAX_SIZE_UNBOUNDED);
+
+    private static final String DB_NAME = "app_db";
     private static final Gson GSON = new Gson();
 
 
@@ -63,8 +64,8 @@ public class Repository {
         return repository;
     }
 
-    public Flowable<PagingData<Hymn>> getPagingDataFlow() {
-        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(PAGE_SIZE, 39, false, 39, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().getPaginatedHymns());
+    public Flowable<PagingData<Hymn>> getHymnPagingDataFlow() {
+        Pager<Integer, Hymn> pager = new Pager<>(PAGING_CONFIG, INITIAL_KEY, () -> database.hymnDao().getPagingHymns());
         return PagingRx.getFlowable(pager);
     }
 
@@ -108,8 +109,17 @@ public class Repository {
     }
 
     public Flowable<PagingData<Hymn>> searchHymn(String query) {
-        Pager<Integer, Hymn> pager = new Pager<>(new PagingConfig(PAGE_SIZE, 39, false, 39, PagingConfig.MAX_SIZE_UNBOUNDED), 0, () -> database.hymnDao().searchHymn(query));
+        Pager<Integer, Hymn> pager = new Pager<>(PAGING_CONFIG, INITIAL_KEY, () -> database.hymnDao().searchHymn(query));
         return PagingRx.getFlowable(pager);
+    }
+
+    public Flowable<PagingData<Hymn>> getFavHymns() {
+        Pager<Integer, Hymn> pager = new Pager<>(PAGING_CONFIG, INITIAL_KEY, () -> database.hymnDao().getFavHymns());
+        return PagingRx.getFlowable(pager);
+    }
+
+    public boolean updateHymn(Hymn hymn) {
+        return database.hymnDao().updateHymn(hymn);
     }
 
 }

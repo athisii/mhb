@@ -7,17 +7,22 @@
     <fragment
         android:id="@+id/home_hymn_fragment"
         android:name="com.athisii.mhb.ui.fragment.HomeHymnFragment"
-        android:label="Hymn"
+        android:label="Hymns"
         tools:layout="@layout/fragment_home_hymn">
         <action
             android:id="@+id/action_home_hymn_fragment_to_detail_hymn_fragment"
             app:destination="@id/detail_hymn_fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/favourite_hymn_fragment"
         android:name="com.athisii.mhb.ui.fragment.FavouriteHymnFragment"
-        android:label="Favourite"
-        tools:layout="@layout/fragment_favourite_hymn" />
+        android:label="Favourites"
+        tools:layout="@layout/fragment_favourite_hymn">
+        <action
+            android:id="@+id/action_favourite_hymn_fragment_to_detail_hymn_fragment"
+            app:destination="@id/detail_hymn_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/compose_song_fragment"
         android:name="com.athisii.mhb.ui.fragment.ComposeSongFragment"
@@ -39,10 +44,7 @@
         android:label="Detail Hymn"
         tools:layout="@layout/fragment_detail_hymn">
         <argument
-            android:name="id"
-            app:argType="long" />
-        <argument
-            android:name="hymnNumber"
-            app:argType="integer" />
+            android:name="hymn"
+            app:argType="com.athisii.mhb.entity.Hymn" />
     </fragment>
 </navigation>

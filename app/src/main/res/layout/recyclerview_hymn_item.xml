@@ -19,7 +19,7 @@
         android:layout_height="50dp">
 
         <TextView
-            android:id="@+id/maola_title_tv"
+            android:id="@+id/hymn_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -29,7 +29,7 @@
             android:text="@{` `+ hymn.hymnNumber +` | `+ (isLanguageEnglish==true?hymn.englishTitle:hymn.maolaTitle)}"
             android:textSize="@dimen/font_size"
             android:textStyle="bold"
-            tools:text="Maola Title" />
+            tools:text="Hymn Title" />
 
     </androidx.cardview.widget.CardView>
 </layout>
