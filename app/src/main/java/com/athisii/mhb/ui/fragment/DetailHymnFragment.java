@@ -3,6 +3,7 @@ package com.athisii.mhb.ui.fragment;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -33,8 +35,8 @@ import com.athisii.mhb.databinding.FragmentDetailHymnBinding;
 import com.athisii.mhb.entity.Hymn;
 import com.athisii.mhb.entity.HymnVerse;
 import com.athisii.mhb.entity.HymnVerseLine;
-import com.athisii.mhb.ui.viewmodel.HomeHymnViewModelFactory;
 import com.athisii.mhb.ui.viewmodel.HymnViewModel;
+import com.athisii.mhb.ui.viewmodel.HymnViewModelFactory;
 
 import java.util.Comparator;
 import java.util.List;
@@ -45,14 +47,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 
-public class DetailHymnFragment extends Fragment {
+public class DetailHymnFragment extends Fragment implements View.OnTouchListener {
     private MainActivity parentActivity;
     private App application;
     private FragmentDetailHymnBinding binding;
     private SortedMap<HymnVerse, List<HymnVerseLine>> hymnContentSortedMap;
     private List<HymnVerseLine> chorus;
     private HymnViewModel viewModel;
-
     private Hymn hymn;
     private static final FrameLayout.LayoutParams cardViewLayoutParams;
     private static final FrameLayout.LayoutParams linearLayoutParams;
@@ -72,6 +73,7 @@ public class DetailHymnFragment extends Fragment {
         marginLayout.setMargins(20, 0, 0, 20);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class DetailHymnFragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
         application = (App) parentActivity.getApplication();
 
-        viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HymnViewModel.class);
+        viewModel = new ViewModelProvider(this, new HymnViewModelFactory(application)).get(HymnViewModel.class);
 
         //hides bottom  navigation
         parentActivity.getBinding().appBarMain.babMain.setVisibility(View.GONE);
@@ -106,7 +108,9 @@ public class DetailHymnFragment extends Fragment {
         }
         displayHymnContent();
         addToolbarMenuItems();
-        return binding.getRoot();
+        View root = binding.getRoot();
+        root.setOnTouchListener(this);
+        return root;
     }
 
     private void displayHymnContent() {
@@ -228,5 +232,18 @@ public class DetailHymnFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         parentActivity.getBinding().appBarMain.babMain.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            Log.i("info", "Down.");
+            return true;
+        }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            Log.i("info", "UP.");
+            return true;
+        }
+        return true;
     }
 }

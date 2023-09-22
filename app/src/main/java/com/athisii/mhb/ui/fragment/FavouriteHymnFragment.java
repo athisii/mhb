@@ -14,7 +14,7 @@ import com.athisii.mhb.App;
 import com.athisii.mhb.MainActivity;
 import com.athisii.mhb.databinding.FragmentFavouriteHymnBinding;
 import com.athisii.mhb.ui.adapter.HymnPagingDataAdapter;
-import com.athisii.mhb.ui.viewmodel.HomeHymnViewModelFactory;
+import com.athisii.mhb.ui.viewmodel.HymnViewModelFactory;
 import com.athisii.mhb.ui.viewmodel.HymnViewModel;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -26,7 +26,7 @@ public class FavouriteHymnFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         var binding = FragmentFavouriteHymnBinding.inflate(inflater);
         App application = (App) ((MainActivity) requireActivity()).getApplication();
-        var viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HymnViewModel.class);
+        var viewModel = new ViewModelProvider(this, new HymnViewModelFactory(application)).get(HymnViewModel.class);
 
         var hymnPagingDataAdapter = new HymnPagingDataAdapter(hymn -> {
             if (hymn != null) {

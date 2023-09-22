@@ -20,7 +20,7 @@ import com.athisii.mhb.MainActivity;
 import com.athisii.mhb.R;
 import com.athisii.mhb.databinding.FragmentHomeHymnBinding;
 import com.athisii.mhb.ui.adapter.HymnPagingDataAdapter;
-import com.athisii.mhb.ui.viewmodel.HomeHymnViewModelFactory;
+import com.athisii.mhb.ui.viewmodel.HymnViewModelFactory;
 import com.athisii.mhb.ui.viewmodel.HymnViewModel;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -40,7 +40,7 @@ public class HomeHymnFragment extends Fragment {
         parentActivity = (MainActivity) requireActivity();
         application = (App) parentActivity.getApplication();
 
-        viewModel = new ViewModelProvider(this, new HomeHymnViewModelFactory(application)).get(HymnViewModel.class);
+        viewModel = new ViewModelProvider(this, new HymnViewModelFactory(application)).get(HymnViewModel.class);
         hymnPagingDataAdapter = new HymnPagingDataAdapter(hymn -> {
             if (hymn != null) {
                 Navigation.findNavController(requireView()).navigate(HomeHymnFragmentDirections.actionHomeHymnFragmentToDetailHymnFragment(hymn));
